@@ -28,10 +28,8 @@
 #include "sampling.h"
 #include "symmetric.h"
 #include "verify.h"
+#include "native_capability.h"
 
-#if !defined(MLK_USE_NATIVE_POLY_TOMONT) ||           \
-    !defined(MLK_USE_NATIVE_POLY_MULCACHE_COMPUTE) || \
-    !defined(MLK_USE_NATIVE_NTT) || !defined(MLK_USE_NATIVE_INTT)
 /*************************************************
  * Name:        mlk_fqmul
  *
@@ -68,8 +66,6 @@ __contract__(
   mlk_assert_abs_bound(&res, 1, MLKEM_Q);
   return res;
 }
-#endif /* !MLK_USE_NATIVE_POLY_TOMONT || !MLK_USE_NATIVE_POLY_MULCACHE_COMPUTE \
-          || !MLK_USE_NATIVE_NTT || !MLK_USE_NATIVE_INTT */
 
 #if !defined(MLK_USE_NATIVE_POLY_REDUCE) || !defined(MLK_USE_NATIVE_INTT)
 /*************************************************
@@ -245,20 +241,13 @@ void mlk_poly_sub(mlk_poly *r, const mlk_poly *b)
   }
 }
 
-/* Include zeta table unless NTT, invNTT and mulcache computation
- * have been replaced by native implementations. */
-#if !defined(MLK_USE_NATIVE_POLY_MULCACHE_COMPUTE) || \
-    !defined(MLK_USE_NATIVE_NTT) || !defined(MLK_USE_NATIVE_INTT)
 #include "zetas.inc"
-#endif
-
-#if !defined(MLK_USE_NATIVE_POLY_MULCACHE_COMPUTE)
 /* Reference: Does not exist in the reference implementation @[REF].
  *            - The reference implementation does not use a
  *              multiplication cache ('mulcache'). This idea originates
  *              from @[NeonNTT] and is used at the C level here. */
 MLK_INTERNAL_API
-void mlk_poly_mulcache_compute(mlk_poly_mulcache *x, const mlk_poly *a)
+void mlk_poly_mulcache_compute_ref(mlk_poly_mulcache *x, const mlk_poly *a)
 {
   unsigned i;
   for (i = 0; i < MLKEM_N / 4; i++)
@@ -278,13 +267,29 @@ void mlk_poly_mulcache_compute(mlk_poly_mulcache *x, const mlk_poly *a)
    */
   mlk_assert_abs_bound(x, MLKEM_N / 2, MLKEM_Q);
 }
-#else  /* !MLK_USE_NATIVE_POLY_MULCACHE_COMPUTE */
+
+#if defined(MLK_USE_NATIVE_POLY_MULCACHE_COMPUTE)
 MLK_INTERNAL_API
-void mlk_poly_mulcache_compute(mlk_poly_mulcache *x, const mlk_poly *a)
+void mlk_poly_mulcache_compute_nat(mlk_poly_mulcache *x, const mlk_poly *a)
 {
   mlk_poly_mulcache_compute_native(x->coeffs, a->coeffs);
 }
 #endif /* MLK_USE_NATIVE_POLY_MULCACHE_COMPUTE */
+
+MLK_INTERNAL_API
+void mlk_poly_mulcache_compute(mlk_poly_mulcache *x, const mlk_poly *a)
+{
+#if defined(MLK_USE_NATIVE_POLY_MULCACHE_COMPUTE)
+  if (mlk_is_native_capable())
+  {
+    mlk_poly_mulcache_compute_nat(x, a);
+    return;
+  }
+#endif /* MLK_USE_NATIVE_POLY_MULCACHE_COMPUTE */
+  mlk_poly_mulcache_compute_ref(x, a);
+  return;
+}
+
 
 #if !defined(MLK_USE_NATIVE_NTT)
 /*
