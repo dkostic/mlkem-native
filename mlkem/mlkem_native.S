@@ -303,6 +303,8 @@
 #undef mlk_assert_bound_2d
 #undef mlk_debug_check_assert
 #undef mlk_debug_check_bounds
+/* mlkem/src/native_capability.h */
+#undef MLK_NATIVE_CAPABILITY_H
 /* mlkem/src/poly.h */
 #undef MLK_INVNTT_BOUND
 #undef MLK_NTT_BOUND
@@ -310,6 +312,8 @@
 #undef mlk_poly_add
 #undef mlk_poly_invntt_tomont
 #undef mlk_poly_mulcache_compute
+#undef mlk_poly_mulcache_compute_nat
+#undef mlk_poly_mulcache_compute_ref
 #undef mlk_poly_ntt
 #undef mlk_poly_reduce
 #undef mlk_poly_sub

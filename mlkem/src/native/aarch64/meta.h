@@ -23,6 +23,7 @@
 
 #if !defined(__ASSEMBLER__)
 #include "src/arith_native_aarch64.h"
+#include "../../native_capability.h"
 
 static MLK_INLINE void mlk_ntt_native(int16_t data[MLKEM_N])
 {
@@ -46,11 +47,17 @@ static MLK_INLINE void mlk_poly_tomont_native(int16_t data[MLKEM_N])
   mlk_poly_tomont_asm(data);
 }
 
-static MLK_INLINE void mlk_poly_mulcache_compute_native(
+static MLK_INLINE int mlk_poly_mulcache_compute_native(
     int16_t x[MLKEM_N / 2], const int16_t y[MLKEM_N])
 {
-  mlk_poly_mulcache_compute_asm(x, y, mlk_aarch64_zetas_mulcache_native,
-                                mlk_aarch64_zetas_mulcache_twisted_native);
+  if (!mlk_is_native_capable())
+  {
+    return 0;
+  } else {
+    mlk_poly_mulcache_compute_asm(x, y, mlk_aarch64_zetas_mulcache_native,
+                                  mlk_aarch64_zetas_mulcache_twisted_native);
+    return 1;
+  }
 }
 
 #if defined(MLK_CONFIG_MULTILEVEL_WITH_SHARED) || MLKEM_K == 2

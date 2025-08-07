@@ -156,6 +156,8 @@ __contract__(
 );
 
 #define mlk_poly_mulcache_compute MLK_NAMESPACE(poly_mulcache_compute)
+#define mlk_poly_mulcache_compute_ref MLK_NAMESPACE(poly_mulcache_compute_ref)
+#define mlk_poly_mulcache_compute_nat MLK_NAMESPACE(poly_mulcache_compute_nat)
 /************************************************************
  * Name: mlk_poly_mulcache_compute
  *
@@ -189,6 +191,21 @@ __contract__(
   requires(memory_no_alias(a, sizeof(mlk_poly)))
   assigns(object_whole(x))
 );
+MLK_INTERNAL_API
+void mlk_poly_mulcache_compute_ref(mlk_poly_mulcache *x, const mlk_poly *a)
+__contract__(
+  requires(memory_no_alias(x, sizeof(mlk_poly_mulcache)))
+  requires(memory_no_alias(a, sizeof(mlk_poly)))
+  assigns(object_whole(x))
+);
+MLK_INTERNAL_API
+int mlk_poly_mulcache_compute_nat(mlk_poly_mulcache *x, const mlk_poly *a)
+__contract__(
+  requires(memory_no_alias(x, sizeof(mlk_poly_mulcache)))
+  requires(memory_no_alias(a, sizeof(mlk_poly)))
+  assigns(object_whole(x))
+);
+
 
 #define mlk_poly_reduce MLK_NAMESPACE(poly_reduce)
 /*************************************************
