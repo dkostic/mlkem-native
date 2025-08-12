@@ -31,8 +31,8 @@
 
 #if !defined(__ASSEMBLER__)
 #include <string.h>
-#include "../../native_capability.h"
 #include "../../common.h"
+#include "../../native_capability.h"
 #include "src/arith_native_x86_64.h"
 
 static MLK_INLINE void mlk_poly_permute_bitrev_to_custom(int16_t data[MLKEM_N])
@@ -103,8 +103,8 @@ static MLK_INLINE int mlk_poly_tomont_native(int16_t data[MLKEM_N])
   }
 }
 
-static MLK_INLINE int mlk_poly_mulcache_compute_native(
-    int16_t x[MLKEM_N / 2], const int16_t y[MLKEM_N])
+static MLK_INLINE int mlk_poly_mulcache_compute_native(int16_t x[MLKEM_N / 2],
+                                                       const int16_t y[MLKEM_N])
 {
   if (!mlk_is_native_capable())
   {

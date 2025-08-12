@@ -45,7 +45,7 @@ void mlk_poly_compress_d4(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES_D4],
   {
     return;
   }
-#endif
+#endif /* MLK_USE_NATIVE_POLY_COMPRESS_D4 */
   unsigned i;
   mlk_assert_bound(a, MLKEM_N, 0, MLKEM_Q);
 
@@ -86,7 +86,7 @@ void mlk_poly_compress_d10(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES_D10],
   {
     return;
   }
-#endif
+#endif /* MLK_USE_NATIVE_POLY_COMPRESS_D10 */
   unsigned j;
   mlk_assert_bound(a, MLKEM_N, 0, MLKEM_Q);
   for (j = 0; j < MLKEM_N / 4; j++)
@@ -127,7 +127,7 @@ void mlk_poly_decompress_d4(mlk_poly *r,
     mlk_assert_bound(r, MLKEM_N, 0, MLKEM_Q);
     return;
   }
-#endif
+#endif /* MLK_USE_NATIVE_POLY_DECOMPRESS_D4 */
   unsigned i;
   for (i = 0; i < MLKEM_N / 2; i++)
   __loop__(
@@ -154,7 +154,7 @@ void mlk_poly_decompress_d10(mlk_poly *r,
     mlk_assert_bound(r, MLKEM_N, 0, MLKEM_Q);
     return;
   }
-#endif
+#endif /* MLK_USE_NATIVE_POLY_DECOMPRESS_D10 */
   unsigned j;
   for (j = 0; j < MLKEM_N / 4; j++)
   __loop__(
@@ -201,7 +201,7 @@ void mlk_poly_compress_d5(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES_D5],
   {
     return;
   }
-#endif
+#endif /* MLK_USE_NATIVE_POLY_COMPRESS_D5 */
   unsigned i;
   mlk_assert_bound(a, MLKEM_N, 0, MLKEM_Q);
 
@@ -248,7 +248,7 @@ void mlk_poly_compress_d11(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES_D11],
   {
     return;
   }
-#endif
+#endif /* MLK_USE_NATIVE_POLY_COMPRESS_D11 */
   unsigned j;
   mlk_assert_bound(a, MLKEM_N, 0, MLKEM_Q);
 
@@ -296,7 +296,7 @@ void mlk_poly_decompress_d5(mlk_poly *r,
     mlk_assert_bound(r, MLKEM_N, 0, MLKEM_Q);
     return;
   }
-#endif
+#endif /* MLK_USE_NATIVE_POLY_DECOMPRESS_D5 */
   unsigned i;
   for (i = 0; i < MLKEM_N / 8; i++)
   __loop__(
@@ -351,7 +351,7 @@ void mlk_poly_decompress_d11(mlk_poly *r,
     mlk_assert_bound(r, MLKEM_N, 0, MLKEM_Q);
     return;
   }
-#endif
+#endif /* MLK_USE_NATIVE_POLY_DECOMPRESS_D11 */
   unsigned j;
   for (j = 0; j < MLKEM_N / 8; j++)
   __loop__(
@@ -401,7 +401,7 @@ void mlk_poly_tobytes(uint8_t r[MLKEM_POLYBYTES], const mlk_poly *a)
   {
     return;
   }
-#endif
+#endif /* MLK_USE_NATIVE_POLY_TOBYTES */
   unsigned i;
   mlk_assert_bound(a, MLKEM_N, 0, MLKEM_Q);
 
@@ -441,7 +441,7 @@ void mlk_poly_frombytes(mlk_poly *r, const uint8_t a[MLKEM_POLYBYTES])
   {
     return;
   }
-#endif
+#endif /* MLK_USE_NATIVE_POLY_FROMBYTES */
   unsigned i;
   for (i = 0; i < MLKEM_N / 2; i++)
   __loop__(
