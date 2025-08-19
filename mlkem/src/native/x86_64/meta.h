@@ -164,7 +164,7 @@ static MLK_INLINE int mlk_poly_tobytes_native(uint8_t r[MLKEM_POLYBYTES],
     return MLK_NATIVE_FUNC_FALLBACK;
   }
 
-  mlk_ntttobytes_avx2(r, (const __m256i *)a, mlk_qdata);
+  mlk_ntttobytes_avx2(r, a, mlk_qdata);
   return MLK_NATIVE_FUNC_SUCCESS;
 }
 
@@ -176,7 +176,7 @@ static MLK_INLINE int mlk_poly_frombytes_native(
     return MLK_NATIVE_FUNC_FALLBACK;
   }
 
-  mlk_nttfrombytes_avx2((__m256i *)r, a, mlk_qdata);
+  mlk_nttfrombytes_avx2(r, a, mlk_qdata);
   return MLK_NATIVE_FUNC_SUCCESS;
 }
 

@@ -62,11 +62,11 @@ void mlk_polyvec_basemul_acc_montgomery_cached_asm_k4(int16_t *r,
                                                       const int16_t *qdata);
 
 #define mlk_ntttobytes_avx2 MLK_NAMESPACE(ntttobytes_avx2)
-void mlk_ntttobytes_avx2(uint8_t *r, const __m256i *a,
+void mlk_ntttobytes_avx2(uint8_t *r, const int16_t *a,
                          const int16_t *mlk_qdata);
 
 #define mlk_nttfrombytes_avx2 MLK_NAMESPACE(nttfrombytes_avx2)
-void mlk_nttfrombytes_avx2(__m256i *r, const uint8_t *a,
+void mlk_nttfrombytes_avx2(int16_t *r, const uint8_t *a,
                            const int16_t *mlk_qdata);
 
 #define mlk_tomont_avx2 MLK_NAMESPACE(tomont_avx2)
