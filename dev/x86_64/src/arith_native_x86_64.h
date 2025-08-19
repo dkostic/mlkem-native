@@ -33,12 +33,8 @@ void mlk_nttunpack_avx2(int16_t *r);
 #define mlk_reduce_avx2 MLK_NAMESPACE(reduce_avx2)
 void mlk_reduce_avx2(int16_t *r, const int16_t *mlk_qdata);
 
-#define mlk_basemul_avx2 MLK_NAMESPACE(basemul_avx2)
-void mlk_basemul_avx2(__m256i *r, const __m256i *a, const __m256i *b,
-                      const __m256i *b_cache, const int16_t *mlk_qdata);
-
 #define mlk_poly_mulcache_compute_avx2 MLK_NAMESPACE(poly_mulcache_compute_avx2)
-void mlk_poly_mulcache_compute_avx2(__m256i *out, const __m256i *in,
+void mlk_poly_mulcache_compute_avx2(int16_t *out, const int16_t *in,
                                     const int16_t *mlk_qdata);
 
 #define mlk_polyvec_basemul_acc_montgomery_cached_asm_k2 \

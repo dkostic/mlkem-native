@@ -520,7 +520,6 @@
 /* mlkem/src/native/x86_64/src/arith_native_x86_64.h */
 #undef MLK_AVX2_REJ_UNIFORM_BUFLEN
 #undef MLK_NATIVE_X86_64_SRC_ARITH_NATIVE_X86_64_H
-#undef mlk_basemul_avx2
 #undef mlk_invntt_avx2
 #undef mlk_ntt_avx2
 #undef mlk_nttfrombytes_avx2

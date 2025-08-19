@@ -107,7 +107,7 @@ static MLK_INLINE int mlk_poly_mulcache_compute_native(int16_t x[MLKEM_N / 2],
     return MLK_NATIVE_FUNC_FALLBACK;
   }
 
-  mlk_poly_mulcache_compute_avx2((__m256i *)x, (const __m256i *)y, mlk_qdata);
+  mlk_poly_mulcache_compute_avx2(x, y, mlk_qdata);
   return MLK_NATIVE_FUNC_SUCCESS;
 }
 
