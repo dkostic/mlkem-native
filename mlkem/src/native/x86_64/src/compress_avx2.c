@@ -69,7 +69,7 @@ void mlk_poly_compress_d4_avx2(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES_D4],
   }
 }
 
-void mlk_poly_decompress_d4_avx2(__m256i *MLK_RESTRICT r,
+void mlk_poly_decompress_d4_avx2(int16_t *MLK_RESTRICT r,
                                  const uint8_t a[MLKEM_POLYCOMPRESSEDBYTES_D4])
 {
   unsigned int i;
@@ -91,7 +91,7 @@ void mlk_poly_decompress_d4_avx2(__m256i *MLK_RESTRICT r,
     f = _mm256_and_si256(f, mask);
     f = _mm256_mullo_epi16(f, shift);
     f = _mm256_mulhrs_epi16(f, q);
-    _mm256_store_si256(&r[i], f);
+    _mm256_storeu_si256((__m256i *)&r[16 * i], f);
   }
 }
 
