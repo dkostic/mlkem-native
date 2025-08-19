@@ -43,10 +43,10 @@ void mlk_poly_compress_d4_avx2(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES_D4],
 
   for (i = 0; i < MLKEM_N / 64; i++)
   {
-    f0 = _mm256_load_si256(&a[64 * i + 0 * 16]);
-    f1 = _mm256_load_si256(&a[64 * i + 1 * 16]);
-    f2 = _mm256_load_si256(&a[64 * i + 2 * 16]);
-    f3 = _mm256_load_si256(&a[64 * i + 3 * 16]);
+    f0 = _mm256_load_si256((__m256i *)&a[64 * i + 0 * 16]);
+    f1 = _mm256_load_si256((__m256i *)&a[64 * i + 1 * 16]);
+    f2 = _mm256_load_si256((__m256i *)&a[64 * i + 2 * 16]);
+    f3 = _mm256_load_si256((__m256i *)&a[64 * i + 3 * 16]);
     f0 = _mm256_mulhi_epi16(f0, v);
     f1 = _mm256_mulhi_epi16(f1, v);
     f2 = _mm256_mulhi_epi16(f2, v);
