@@ -201,7 +201,7 @@ static MLK_INLINE int mlk_poly_compress_d10_native(
     return MLK_NATIVE_FUNC_FALLBACK;
   }
 
-  mlk_poly_compress_d10_avx2(r, (const __m256i *)a);
+  mlk_poly_compress_d10_avx2(r, a);
   return MLK_NATIVE_FUNC_SUCCESS;
 }
 
@@ -225,7 +225,7 @@ static MLK_INLINE int mlk_poly_decompress_d10_native(
     return MLK_NATIVE_FUNC_FALLBACK;
   }
 
-  mlk_poly_decompress_d10_avx2((__m256i *)r, a);
+  mlk_poly_decompress_d10_avx2(r, a);
   return MLK_NATIVE_FUNC_SUCCESS;
 }
 #endif /* MLK_CONFIG_MULTILEVEL_WITH_SHARED || MLKEM_K == 2 || MLKEM_K == 3 */
