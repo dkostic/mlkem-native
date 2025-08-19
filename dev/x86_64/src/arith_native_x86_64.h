@@ -22,24 +22,24 @@ uint64_t mlk_rej_uniform_asm(int16_t *r, const uint8_t *buf, unsigned buflen,
 extern const uint8_t mlk_rej_uniform_table[];
 
 #define mlk_ntt_avx2 MLK_NAMESPACE(ntt_avx2)
-void mlk_ntt_avx2(__m256i *r, const __m256i *mlk_qdata);
+void mlk_ntt_avx2(__m256i *r, const int16_t *mlk_qdata);
 
 #define mlk_invntt_avx2 MLK_NAMESPACE(invntt_avx2)
-void mlk_invntt_avx2(__m256i *r, const __m256i *mlk_qdata);
+void mlk_invntt_avx2(__m256i *r, const int16_t *mlk_qdata);
 
 #define mlk_nttunpack_avx2 MLK_NAMESPACE(nttunpack_avx2)
 void mlk_nttunpack_avx2(__m256i *r);
 
 #define mlk_reduce_avx2 MLK_NAMESPACE(reduce_avx2)
-void mlk_reduce_avx2(__m256i *r, const __m256i *mlk_qdata);
+void mlk_reduce_avx2(__m256i *r, const int16_t *mlk_qdata);
 
 #define mlk_basemul_avx2 MLK_NAMESPACE(basemul_avx2)
 void mlk_basemul_avx2(__m256i *r, const __m256i *a, const __m256i *b,
-                      const __m256i *b_cache, const __m256i *mlk_qdata);
+                      const __m256i *b_cache, const int16_t *mlk_qdata);
 
 #define mlk_poly_mulcache_compute_avx2 MLK_NAMESPACE(poly_mulcache_compute_avx2)
 void mlk_poly_mulcache_compute_avx2(__m256i *out, const __m256i *in,
-                                    const __m256i *mlk_qdata);
+                                    const int16_t *mlk_qdata);
 
 #define mlk_polyvec_basemul_acc_montgomery_cached_asm_k2 \
   MLK_NAMESPACE(polyvec_basemul_acc_montgomery_cached_asm_k2)
@@ -67,14 +67,14 @@ void mlk_polyvec_basemul_acc_montgomery_cached_asm_k4(int16_t *r,
 
 #define mlk_ntttobytes_avx2 MLK_NAMESPACE(ntttobytes_avx2)
 void mlk_ntttobytes_avx2(uint8_t *r, const __m256i *a,
-                         const __m256i *mlk_qdata);
+                         const int16_t *mlk_qdata);
 
 #define mlk_nttfrombytes_avx2 MLK_NAMESPACE(nttfrombytes_avx2)
 void mlk_nttfrombytes_avx2(__m256i *r, const uint8_t *a,
-                           const __m256i *mlk_qdata);
+                           const int16_t *mlk_qdata);
 
 #define mlk_tomont_avx2 MLK_NAMESPACE(tomont_avx2)
-void mlk_tomont_avx2(__m256i *r, const __m256i *mlk_qdata);
+void mlk_tomont_avx2(__m256i *r, const int16_t *mlk_qdata);
 
 #define mlk_poly_compress_d4_avx2 MLK_NAMESPACE(poly_compress_d4_avx2)
 void mlk_poly_compress_d4_avx2(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES_D4],
