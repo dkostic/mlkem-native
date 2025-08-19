@@ -22,16 +22,16 @@ uint64_t mlk_rej_uniform_asm(int16_t *r, const uint8_t *buf, unsigned buflen,
 extern const uint8_t mlk_rej_uniform_table[];
 
 #define mlk_ntt_avx2 MLK_NAMESPACE(ntt_avx2)
-void mlk_ntt_avx2(__m256i *r, const int16_t *mlk_qdata);
+void mlk_ntt_avx2(int16_t *r, const int16_t *mlk_qdata);
 
 #define mlk_invntt_avx2 MLK_NAMESPACE(invntt_avx2)
-void mlk_invntt_avx2(__m256i *r, const int16_t *mlk_qdata);
+void mlk_invntt_avx2(int16_t *r, const int16_t *mlk_qdata);
 
 #define mlk_nttunpack_avx2 MLK_NAMESPACE(nttunpack_avx2)
-void mlk_nttunpack_avx2(__m256i *r);
+void mlk_nttunpack_avx2(int16_t *r);
 
 #define mlk_reduce_avx2 MLK_NAMESPACE(reduce_avx2)
-void mlk_reduce_avx2(__m256i *r, const int16_t *mlk_qdata);
+void mlk_reduce_avx2(int16_t *r, const int16_t *mlk_qdata);
 
 #define mlk_basemul_avx2 MLK_NAMESPACE(basemul_avx2)
 void mlk_basemul_avx2(__m256i *r, const __m256i *a, const __m256i *b,

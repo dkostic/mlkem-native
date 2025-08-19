@@ -39,7 +39,7 @@ static MLK_INLINE void mlk_poly_permute_bitrev_to_custom(int16_t data[MLKEM_N])
 {
   if (mlk_sys_check_capability(MLK_SYS_CAP_AVX2))
   {
-    mlk_nttunpack_avx2((__m256i *)(data));
+    mlk_nttunpack_avx2(data);
   }
 }
 
@@ -62,7 +62,7 @@ static MLK_INLINE int mlk_ntt_native(int16_t data[MLKEM_N])
     return MLK_NATIVE_FUNC_FALLBACK;
   }
 
-  mlk_ntt_avx2((__m256i *)data, mlk_qdata);
+  mlk_ntt_avx2(data, mlk_qdata);
   return MLK_NATIVE_FUNC_SUCCESS;
 }
 
@@ -73,7 +73,7 @@ static MLK_INLINE int mlk_intt_native(int16_t data[MLKEM_N])
     return MLK_NATIVE_FUNC_FALLBACK;
   }
 
-  mlk_invntt_avx2((__m256i *)data, mlk_qdata);
+  mlk_invntt_avx2(data, mlk_qdata);
   return MLK_NATIVE_FUNC_SUCCESS;
 }
 
@@ -84,7 +84,7 @@ static MLK_INLINE int mlk_poly_reduce_native(int16_t data[MLKEM_N])
     return MLK_NATIVE_FUNC_FALLBACK;
   }
 
-  mlk_reduce_avx2((__m256i *)data, mlk_qdata);
+  mlk_reduce_avx2(data, mlk_qdata);
   return MLK_NATIVE_FUNC_SUCCESS;
 }
 
