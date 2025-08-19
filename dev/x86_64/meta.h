@@ -239,7 +239,7 @@ static MLK_INLINE int mlk_poly_compress_d5_native(
     return MLK_NATIVE_FUNC_FALLBACK;
   }
 
-  mlk_poly_compress_d5_avx2(r, (const __m256i *)a);
+  mlk_poly_compress_d5_avx2(r, a);
   return MLK_NATIVE_FUNC_SUCCESS;
 }
 
@@ -263,7 +263,7 @@ static MLK_INLINE int mlk_poly_decompress_d5_native(
     return MLK_NATIVE_FUNC_FALLBACK;
   }
 
-  mlk_poly_decompress_d5_avx2((__m256i *)r, a);
+  mlk_poly_decompress_d5_avx2(r, a);
   return MLK_NATIVE_FUNC_SUCCESS;
 }
 
