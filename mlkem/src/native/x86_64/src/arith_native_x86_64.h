@@ -92,9 +92,9 @@ void mlk_poly_decompress_d5_avx2(int16_t *MLK_RESTRICT r,
                                  const uint8_t a[MLKEM_POLYCOMPRESSEDBYTES_D5]);
 #define mlk_poly_compress_d11_avx2 MLK_NAMESPACE(poly_compress11_avx2)
 void mlk_poly_compress_d11_avx2(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES_D11],
-                                const __m256i *MLK_RESTRICT a);
+                                const int16_t *MLK_RESTRICT a);
 #define mlk_poly_decompress_d11_avx2 MLK_NAMESPACE(poly_decompress11_avx2)
 void mlk_poly_decompress_d11_avx2(
-    __m256i *MLK_RESTRICT r, const uint8_t a[MLKEM_POLYCOMPRESSEDBYTES_D11]);
+    int16_t *MLK_RESTRICT r, const uint8_t a[MLKEM_POLYCOMPRESSEDBYTES_D11]);
 
 #endif /* !MLK_NATIVE_X86_64_SRC_ARITH_NATIVE_X86_64_H */

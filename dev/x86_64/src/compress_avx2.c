@@ -257,7 +257,7 @@ void mlk_poly_decompress_d5_avx2(int16_t *MLK_RESTRICT r,
 }
 
 void mlk_poly_compress_d11_avx2(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES_D11],
-                                const __m256i *MLK_RESTRICT a)
+                                const int16_t *MLK_RESTRICT a)
 {
   unsigned int i;
   __m256i f0, f1, f2;
@@ -278,7 +278,7 @@ void mlk_poly_compress_d11_avx2(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES_D11],
 
   for (i = 0; i < (MLKEM_N / 16) - 1; i++)
   {
-    f0 = _mm256_load_si256(&a[i]);
+    f0 = _mm256_load_si256((__m256i *)&a[16 * i]);
     f1 = _mm256_mullo_epi16(f0, v8);
     f2 = _mm256_add_epi16(f0, off);
     f0 = _mm256_slli_epi16(f0, 3);
@@ -303,7 +303,7 @@ void mlk_poly_compress_d11_avx2(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES_D11],
     _mm_storel_epi64((__m128i *)&r[22 * i + 16], t1);
   }
 
-  f0 = _mm256_load_si256(&a[i]);
+  f0 = _mm256_load_si256((__m256i *)&a[16 * i]);
   f1 = _mm256_mullo_epi16(f0, v8);
   f2 = _mm256_add_epi16(f0, off);
   f0 = _mm256_slli_epi16(f0, 3);
@@ -330,7 +330,7 @@ void mlk_poly_compress_d11_avx2(uint8_t r[MLKEM_POLYCOMPRESSEDBYTES_D11],
 }
 
 void mlk_poly_decompress_d11_avx2(
-    __m256i *MLK_RESTRICT r, const uint8_t a[MLKEM_POLYCOMPRESSEDBYTES_D11])
+    int16_t *MLK_RESTRICT r, const uint8_t a[MLKEM_POLYCOMPRESSEDBYTES_D11])
 {
   unsigned int i;
   __m256i f;
@@ -359,7 +359,7 @@ void mlk_poly_decompress_d11_avx2(
     f = _mm256_srli_epi16(f, 1);
     f = _mm256_and_si256(f, mask);
     f = _mm256_mulhrs_epi16(f, q);
-    _mm256_store_si256(&r[i], f);
+    _mm256_storeu_si256((__m256i *)&r[16 * i], f);
   }
 
   /* Handle load of last iteration especially */
@@ -373,7 +373,7 @@ void mlk_poly_decompress_d11_avx2(
   f = _mm256_srli_epi16(f, 1);
   f = _mm256_and_si256(f, mask);
   f = _mm256_mulhrs_epi16(f, q);
-  _mm256_store_si256(&r[i], f);
+  _mm256_storeu_si256((__m256i *)&r[16 * i], f);
 }
 
 #endif /* MLK_CONFIG_MULTILEVEL_WITH_SHARED || MLKEM_K == 4 */
