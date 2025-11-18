@@ -2135,10 +2135,10 @@ def update_via_simpasm(
 
 
 def gen_hol_light_asm_file(job):
-    infile, outfile, indir, cflags = job
+    infile, outfile, indir, cflags, arch = job
     update_via_simpasm(
         f"{indir}/{infile}",
-        "proofs/hol_light/arm/mlkem",
+        "proofs/hol_light/"+arch+"/mlkem",
         outfile=outfile,
         cflags=cflags,
         preserve_header=False,
@@ -2147,98 +2147,128 @@ def gen_hol_light_asm_file(job):
 
 def gen_hol_light_asm():
 
-    joblist = [
+    joblist_arm = [
         (
             "ntt.S",
             "mlkem_ntt.S",
             "dev/aarch64_opt/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/native/aarch64/src",
+            "arm",
         ),
         (
             "intt.S",
             "mlkem_intt.S",
             "dev/aarch64_opt/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/native/aarch64/src",
+            "arm",
         ),
         (
             "poly_tomont_asm.S",
             "mlkem_poly_tomont.S",
             "dev/aarch64_opt/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/native/aarch64/src",
+            "arm",
         ),
         (
             "poly_tobytes_asm.S",
             "mlkem_poly_tobytes.S",
             "dev/aarch64_opt/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/native/aarch64/src",
+            "arm",
         ),
         (
             "poly_reduce_asm.S",
             "mlkem_poly_reduce.S",
             "dev/aarch64_opt/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/native/aarch64/src",
+            "arm",
         ),
         (
             "poly_mulcache_compute_asm.S",
             "mlkem_poly_mulcache_compute.S",
             "dev/aarch64_opt/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/native/aarch64/src",
+            "arm",
         ),
         (
             "polyvec_basemul_acc_montgomery_cached_asm_k2.S",
             "mlkem_poly_basemul_acc_montgomery_cached_k2.S",
             "dev/aarch64_opt/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/native/aarch64/src",
+            "arm",
         ),
         (
             "polyvec_basemul_acc_montgomery_cached_asm_k3.S",
             "mlkem_poly_basemul_acc_montgomery_cached_k3.S",
             "dev/aarch64_opt/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/native/aarch64/src",
+            "arm",
         ),
         (
             "polyvec_basemul_acc_montgomery_cached_asm_k4.S",
             "mlkem_poly_basemul_acc_montgomery_cached_k4.S",
             "dev/aarch64_opt/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/native/aarch64/src",
+            "arm",
         ),
         (
             "rej_uniform_asm.S",
             "mlkem_rej_uniform.S",
             "dev/aarch64_opt/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/native/aarch64/src",
+            "arm",
         ),
         (
             "keccak_f1600_x1_scalar_asm.S",
             "keccak_f1600_x1_scalar.S",
             "dev/fips202/aarch64/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/fips202/native/aarch64/src/",
+            "arm",
         ),
         (
             "keccak_f1600_x1_v84a_asm.S",
             "keccak_f1600_x1_v84a.S",
             "dev/fips202/aarch64/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/fips202/native/aarch64/src/",
+            "arm",
         ),
         (
             "keccak_f1600_x2_v84a_asm.S",
             "keccak_f1600_x2_v84a.S",
             "dev/fips202/aarch64/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/fips202/native/aarch64/src/",
+            "arm",
         ),
         (
             "keccak_f1600_x4_v8a_v84a_scalar_hybrid_asm.S",
             "keccak_f1600_x4_v8a_v84a_scalar.S",
             "dev/fips202/aarch64/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/fips202/native/aarch64/src/",
+            "arm",
         ),
         (
             "keccak_f1600_x4_v8a_scalar_hybrid_asm.S",
             "keccak_f1600_x4_v8a_scalar.S",
             "dev/fips202/aarch64/src",
             "-march=armv8.4-a+sha3 -Imlkem/src/fips202/native/aarch64/src/",
+            "arm",
         ),
     ]
+
+    joblist_x86 = [
+        (
+            "polyvec_basemul_acc_montgomery_cached_asm_k2.S",
+            "mlkem_poly_basemul_acc_montgomery_cached_k2.S",
+            "dev/x86_64/src",
+            "-Imlkem/src/native/x86_64/src",
+            "x86",
+        ),
+    ]
+
+    if platform.machine().lower() in ["arm64", "aarch64"]:
+        joblist = joblist_arm
+    else:
+        joblist = joblist_x86
 
     with ThreadPoolExecutor() as executor:
         _ = list(executor.map(partial(gen_hol_light_asm_file), joblist))
