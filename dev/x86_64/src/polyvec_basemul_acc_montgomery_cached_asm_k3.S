@@ -10,13 +10,13 @@
 /* simpasm: header-end */
 
 #include "consts.h"
-#include "poly_basemul.inc"
+#include "poly_basemul_lazy.inc"
 
 .global MLK_ASM_NAMESPACE(polyvec_basemul_acc_montgomery_cached_asm_k3)
 .balign 4
 MLK_ASM_FN_SYMBOL(polyvec_basemul_acc_montgomery_cached_asm_k3)
 
-polyvec_basemul 3
+lazy_polyvec_basemul 3
 
 ret
 
