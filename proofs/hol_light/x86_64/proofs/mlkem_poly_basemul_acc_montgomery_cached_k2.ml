@@ -12,6 +12,7 @@ needs "x86/proofs/base.ml";;
 
 needs "common/mlkem_specs.ml";;
 
+
 let mlkem_basemul_k2_mc =
   define_assert_from_elf "mlkem_basemul_k2_mc" "x86_64/mlkem/mlkem_poly_basemul_acc_montgomery_cached_k2.o"
 (*** BYTECODE START ***)
@@ -34,40 +35,89 @@ let mlkem_basemul_k2_mc =
   0xc5; 0xfd; 0x6f; 0x6a; 0x20;
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,32))) *)
   0xc5; 0xfd; 0x6f; 0x31;  (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,0))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x15; 0xf9; 0xc0;
-                           (* VPSUBW (%_% ymm8) (%_% ymm13) (%_% ymm8) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0x3f;  (* VMOVDQA (Memop Word256 (%% (rdi,0))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x4f; 0x20;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,32))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x7f; 0x27;  (* VMOVDQA (Memop Word256 (%% (rdi,0))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0x6f; 0x20;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,32))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x56; 0x40;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,64))) *)
   0xc5; 0xfd; 0x6f; 0x5e; 0x60;
@@ -78,41 +128,90 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,96))) *)
   0xc5; 0xfd; 0x6f; 0x71; 0x20;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,32))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x3d; 0xf9; 0xc5;
-                           (* VPSUBW (%_% ymm8) (%_% ymm8) (%_% ymm13) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0x7f; 0x40;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,64))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x4f; 0x60;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,96))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x7f; 0x67; 0x40;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,64))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0x6f; 0x60;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,96))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0x80; 0x00; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,128))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0xa0; 0x00; 0x00; 0x00;
@@ -123,41 +222,91 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,160))) *)
   0xc5; 0xfd; 0x6f; 0x71; 0x40;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,64))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x15; 0xf9; 0xc0;
-                           (* VPSUBW (%_% ymm8) (%_% ymm13) (%_% ymm8) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0xbf; 0x80; 0x00; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,128))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x8f; 0xa0; 0x00; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,160))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15
+) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x7f; 0xa7; 0x80; 0x00; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,128))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0xaf; 0xa0; 0x00; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,160))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0xc0; 0x00; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,192))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0xe0; 0x00; 0x00; 0x00;
@@ -168,41 +317,90 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,224))) *)
   0xc5; 0xfd; 0x6f; 0x71; 0x60;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,96))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x3d; 0xf9; 0xc5;
-                           (* VPSUBW (%_% ymm8) (%_% ymm8) (%_% ymm13) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0xbf; 0xc0; 0x00; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,192))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x8f; 0xe0; 0x00; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,224))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x7f; 0xa7; 0xc0; 0x00; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,192))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0xaf; 0xe0; 0x00; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,224))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0x00; 0x01; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,256))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0x20; 0x01; 0x00; 0x00;
@@ -213,41 +411,90 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,288))) *)
   0xc5; 0xfd; 0x6f; 0xb1; 0x80; 0x00; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,128))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x15; 0xf9; 0xc0;
-                           (* VPSUBW (%_% ymm8) (%_% ymm13) (%_% ymm8) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0xbf; 0x00; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,256))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x8f; 0x20; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,288))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x7f; 0xa7; 0x00; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,256))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0xaf; 0x20; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,288))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0x40; 0x01; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,320))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0x60; 0x01; 0x00; 0x00;
@@ -258,41 +505,91 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,352))) *)
   0xc5; 0xfd; 0x6f; 0xb1; 0xa0; 0x00; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,160))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x3d; 0xf9; 0xc5;
-                           (* VPSUBW (%_% ymm8) (%_% ymm8) (%_% ymm13) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0xbf; 0x40; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,320))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x8f; 0x60; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,352))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                       
+    (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x7f; 0xa7; 0x40; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,320))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0xaf; 0x60; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,352))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0x80; 0x01; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,384))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0xa0; 0x01; 0x00; 0x00;
@@ -303,41 +600,90 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,416))) *)
   0xc5; 0xfd; 0x6f; 0xb1; 0xc0; 0x00; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,192))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x15; 0xf9; 0xc0;
-                           (* VPSUBW (%_% ymm8) (%_% ymm13) (%_% ymm8) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0xbf; 0x80; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,384))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x8f; 0xa0; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,416))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x7f; 0xa7; 0x80; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,384))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0xaf; 0xa0; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,416))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0xc0; 0x01; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,448))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0xe0; 0x01; 0x00; 0x00;
@@ -348,41 +694,90 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,480))) *)
   0xc5; 0xfd; 0x6f; 0xb1; 0xe0; 0x00; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,224))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x3d; 0xf9; 0xc5;
-                           (* VPSUBW (%_% ymm8) (%_% ymm8) (%_% ymm13) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0xbf; 0xc0; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,448))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x8f; 0xe0; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,480))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x7f; 0xa7; 0xc0; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,448))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0xaf; 0xe0; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,480))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0x00; 0x02; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,512))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0x20; 0x02; 0x00; 0x00;
@@ -393,46 +788,92 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,544))) *)
   0xc5; 0xfd; 0x6f; 0xb1; 0x00; 0x01; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,256))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x15; 0xf9; 0xc0;
-                           (* VPSUBW (%_% ymm8) (%_% ymm13) (%_% ymm8) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0x7d; 0x6f; 0x07;  (* VMOVDQA (%_% ymm8) (Memop Word256 (%% (rdi,0))) *)
-  0xc5; 0x7d; 0x6f; 0x57; 0x20;
-                           (* VMOVDQA (%_% ymm10) (Memop Word256 (%% (rdi,32))) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0x3f;  (* VMOVDQA (Memop Word256 (%% (rdi,0))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x4f; 0x20;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,32))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xdd; 0xfd; 0x27;  (* VPADDW (%_% ymm4) (%_% ymm4) (Memop Word256 (%% (rdi,0))) *)
+  0xc5; 0xd5; 0xfd; 0x6f; 0x20;
+                           (* VPADDW (%_% ymm5) (%_% ymm5) (Memop Word256 (%% (rdi,32))) *)
+  0xc5; 0xfd; 0x7f; 0x27;  (* VMOVDQA (Memop Word256 (%% (rdi,0))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0x6f; 0x20;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,32))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0x40; 0x02; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,576))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0x60; 0x02; 0x00; 0x00;
@@ -443,48 +884,94 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,608))) *)
   0xc5; 0xfd; 0x6f; 0xb1; 0x20; 0x01; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,288))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x3d; 0xf9; 0xc5;
-                           (* VPSUBW (%_% ymm8) (%_% ymm8) (%_% ymm13) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0x7d; 0x6f; 0x47; 0x40;
-                           (* VMOVDQA (%_% ymm8) (Memop Word256 (%% (rdi,64))) *)
-  0xc5; 0x7d; 0x6f; 0x57; 0x60;
-                           (* VMOVDQA (%_% ymm10) (Memop Word256 (%% (rdi,96))) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0x7f; 0x40;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,64))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x4f; 0x60;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,96))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xdd; 0xfd; 0x67; 0x40;
+                           (* VPADDW (%_% ymm4) (%_% ymm4) (Memop Word256 (%% (rdi,64))) *)
+  0xc5; 0xd5; 0xfd; 0x6f; 0x60;
+                           (* VPADDW (%_% ymm5) (%_% ymm5) (Memop Word256 (%% (rdi,96))) *)
+  0xc5; 0xfd; 0x7f; 0x67; 0x40;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,64))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0x6f; 0x60;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,96))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0x80; 0x02; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,640))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0xa0; 0x02; 0x00; 0x00;
@@ -495,48 +982,94 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,672))) *)
   0xc5; 0xfd; 0x6f; 0xb1; 0x40; 0x01; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,320))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x15; 0xf9; 0xc0;
-                           (* VPSUBW (%_% ymm8) (%_% ymm13) (%_% ymm8) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0x7d; 0x6f; 0x87; 0x80; 0x00; 0x00; 0x00;
-                           (* VMOVDQA (%_% ymm8) (Memop Word256 (%% (rdi,128))) *)
-  0xc5; 0x7d; 0x6f; 0x97; 0xa0; 0x00; 0x00; 0x00;
-                           (* VMOVDQA (%_% ymm10) (Memop Word256 (%% (rdi,160))) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0xbf; 0x80; 0x00; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,128))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x8f; 0xa0; 0x00; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,160))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xdd; 0xfd; 0xa7; 0x80; 0x00; 0x00; 0x00;
+                           (* VPADDW (%_% ymm4) (%_% ymm4) (Memop Word256 (%% (rdi,128))) *)
+  0xc5; 0xd5; 0xfd; 0xaf; 0xa0; 0x00; 0x00; 0x00;
+                           (* VPADDW (%_% ymm5) (%_% ymm5) (Memop Word256 (%% (rdi,160))) *)
+  0xc5; 0xfd; 0x7f; 0xa7; 0x80; 0x00; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,128))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0xaf; 0xa0; 0x00; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,160))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0xc0; 0x02; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,704))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0xe0; 0x02; 0x00; 0x00;
@@ -547,48 +1080,94 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,736))) *)
   0xc5; 0xfd; 0x6f; 0xb1; 0x60; 0x01; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,352))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x3d; 0xf9; 0xc5;
-                           (* VPSUBW (%_% ymm8) (%_% ymm8) (%_% ymm13) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0x7d; 0x6f; 0x87; 0xc0; 0x00; 0x00; 0x00;
-                           (* VMOVDQA (%_% ymm8) (Memop Word256 (%% (rdi,192))) *)
-  0xc5; 0x7d; 0x6f; 0x97; 0xe0; 0x00; 0x00; 0x00;
-                           (* VMOVDQA (%_% ymm10) (Memop Word256 (%% (rdi,224))) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0xbf; 0xc0; 0x00; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,192))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x8f; 0xe0; 0x00; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,224))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xdd; 0xfd; 0xa7; 0xc0; 0x00; 0x00; 0x00;
+                           (* VPADDW (%_% ymm4) (%_% ymm4) (Memop Word256 (%% (rdi,192))) *)
+  0xc5; 0xd5; 0xfd; 0xaf; 0xe0; 0x00; 0x00; 0x00;
+                           (* VPADDW (%_% ymm5) (%_% ymm5) (Memop Word256 (%% (rdi,224))) *)
+  0xc5; 0xfd; 0x7f; 0xa7; 0xc0; 0x00; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,192))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0xaf; 0xe0; 0x00; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,224))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0x00; 0x03; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,768))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0x20; 0x03; 0x00; 0x00;
@@ -599,48 +1178,94 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,800))) *)
   0xc5; 0xfd; 0x6f; 0xb1; 0x80; 0x01; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,384))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x15; 0xf9; 0xc0;
-                           (* VPSUBW (%_% ymm8) (%_% ymm13) (%_% ymm8) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0x7d; 0x6f; 0x87; 0x00; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (%_% ymm8) (Memop Word256 (%% (rdi,256))) *)
-  0xc5; 0x7d; 0x6f; 0x97; 0x20; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (%_% ymm10) (Memop Word256 (%% (rdi,288))) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0xbf; 0x00; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,256))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x8f; 0x20; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,288))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xdd; 0xfd; 0xa7; 0x00; 0x01; 0x00; 0x00;
+                           (* VPADDW (%_% ymm4) (%_% ymm4) (Memop Word256 (%% (rdi,256))) *)
+  0xc5; 0xd5; 0xfd; 0xaf; 0x20; 0x01; 0x00; 0x00;
+                           (* VPADDW (%_% ymm5) (%_% ymm5) (Memop Word256 (%% (rdi,288))) *)
+  0xc5; 0xfd; 0x7f; 0xa7; 0x00; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,256))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0xaf; 0x20; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,288))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0x40; 0x03; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,832))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0x60; 0x03; 0x00; 0x00;
@@ -651,48 +1276,94 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,864))) *)
   0xc5; 0xfd; 0x6f; 0xb1; 0xa0; 0x01; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,416))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x3d; 0xf9; 0xc5;
-                           (* VPSUBW (%_% ymm8) (%_% ymm8) (%_% ymm13) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0x7d; 0x6f; 0x87; 0x40; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (%_% ymm8) (Memop Word256 (%% (rdi,320))) *)
-  0xc5; 0x7d; 0x6f; 0x97; 0x60; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (%_% ymm10) (Memop Word256 (%% (rdi,352))) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0xbf; 0x40; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,320))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x8f; 0x60; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,352))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xdd; 0xfd; 0xa7; 0x40; 0x01; 0x00; 0x00;
+                           (* VPADDW (%_% ymm4) (%_% ymm4) (Memop Word256 (%% (rdi,320))) *)
+  0xc5; 0xd5; 0xfd; 0xaf; 0x60; 0x01; 0x00; 0x00;
+                           (* VPADDW (%_% ymm5) (%_% ymm5) (Memop Word256 (%% (rdi,352))) *)
+  0xc5; 0xfd; 0x7f; 0xa7; 0x40; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,320))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0xaf; 0x60; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,352))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0x80; 0x03; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,896))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0xa0; 0x03; 0x00; 0x00;
@@ -703,48 +1374,94 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,928))) *)
   0xc5; 0xfd; 0x6f; 0xb1; 0xc0; 0x01; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,448))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x15; 0xf9; 0xc0;
-                           (* VPSUBW (%_% ymm8) (%_% ymm13) (%_% ymm8) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0x7d; 0x6f; 0x87; 0x80; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (%_% ymm8) (Memop Word256 (%% (rdi,384))) *)
-  0xc5; 0x7d; 0x6f; 0x97; 0xa0; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (%_% ymm10) (Memop Word256 (%% (rdi,416))) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0xbf; 0x80; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,384))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x8f; 0xa0; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,416))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfe; 0xd3;  (* VPADDD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xdd; 0xfd; 0xa7; 0x80; 0x01; 0x00; 0x00;
+                           (* VPADDW (%_% ymm4) (%_% ymm4) (Memop Word256 (%% (rdi,384))) *)
+  0xc5; 0xd5; 0xfd; 0xaf; 0xa0; 0x01; 0x00; 0x00;
+                           (* VPADDW (%_% ymm5) (%_% ymm5) (Memop Word256 (%% (rdi,416))) *)
+  0xc5; 0xfd; 0x7f; 0xa7; 0x80; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,384))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0xaf; 0xa0; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,416))) (%_% ymm5) *)
   0xc5; 0xfd; 0x6f; 0x96; 0xc0; 0x03; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm2) (Memop Word256 (%% (rsi,960))) *)
   0xc5; 0xfd; 0x6f; 0x9e; 0xe0; 0x03; 0x00; 0x00;
@@ -755,48 +1472,94 @@ let mlkem_basemul_k2_mc =
                            (* VMOVDQA (%_% ymm5) (Memop Word256 (%% (rdx,992))) *)
   0xc5; 0xfd; 0x6f; 0xb1; 0xe0; 0x01; 0x00; 0x00;
                            (* VMOVDQA (%_% ymm6) (Memop Word256 (%% (rcx,480))) *)
-  0xc5; 0x75; 0xd5; 0xea;  (* VPMULLW (%_% ymm13) (%_% ymm1) (%_% ymm2) *)
-  0xc5; 0x75; 0xd5; 0xf3;  (* VPMULLW (%_% ymm14) (%_% ymm1) (%_% ymm3) *)
-  0xc4; 0xc1; 0x5d; 0xd5; 0xfd;
-                           (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm13) *)
-  0xc4; 0x41; 0x55; 0xd5; 0xcd;
-                           (* VPMULLW (%_% ymm9) (%_% ymm5) (%_% ymm13) *)
-  0xc4; 0x41; 0x4d; 0xd5; 0xc6;
-                           (* VPMULLW (%_% ymm8) (%_% ymm6) (%_% ymm14) *)
-  0xc4; 0x41; 0x5d; 0xd5; 0xd6;
-                           (* VPMULLW (%_% ymm10) (%_% ymm4) (%_% ymm14) *)
-  0xc5; 0xfd; 0xe5; 0xff;  (* VPMULHW (%_% ymm7) (%_% ymm0) (%_% ymm7) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc9;
-                           (* VPMULHW (%_% ymm9) (%_% ymm0) (%_% ymm9) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xc0;
-                           (* VPMULHW (%_% ymm8) (%_% ymm0) (%_% ymm8) *)
-  0xc4; 0x41; 0x7d; 0xe5; 0xd2;
-                           (* VPMULHW (%_% ymm10) (%_% ymm0) (%_% ymm10) *)
-  0xc5; 0x5d; 0xe5; 0xda;  (* VPMULHW (%_% ymm11) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0xdd; 0xd5; 0xfa;  (* VPMULLW (%_% ymm7) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x5d; 0xe5; 0xc2;  (* VPMULHW (%_% ymm8) (%_% ymm4) (%_% ymm2) *)
+  0xc5; 0x4d; 0xd5; 0xcb;  (* VPMULLW (%_% ymm9) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x4d; 0xe5; 0xd3;  (* VPMULHW (%_% ymm10) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x55; 0xd5; 0xda;  (* VPMULLW (%_% ymm11) (%_% ymm5) (%_% ymm2) *)
   0xc5; 0x55; 0xe5; 0xe2;  (* VPMULHW (%_% ymm12) (%_% ymm5) (%_% ymm2) *)
-  0xc5; 0x4d; 0xe5; 0xeb;  (* VPMULHW (%_% ymm13) (%_% ymm6) (%_% ymm3) *)
+  0xc5; 0x5d; 0xd5; 0xeb;  (* VPMULLW (%_% ymm13) (%_% ymm4) (%_% ymm3) *)
   0xc5; 0x5d; 0xe5; 0xf3;  (* VPMULHW (%_% ymm14) (%_% ymm4) (%_% ymm3) *)
-  0xc5; 0xa5; 0xf9; 0xff;  (* VPSUBW (%_% ymm7) (%_% ymm11) (%_% ymm7) *)
-  0xc4; 0x41; 0x1d; 0xf9; 0xc9;
-                           (* VPSUBW (%_% ymm9) (%_% ymm12) (%_% ymm9) *)
-  0xc4; 0x41; 0x3d; 0xf9; 0xc5;
-                           (* VPSUBW (%_% ymm8) (%_% ymm8) (%_% ymm13) *)
-  0xc4; 0x41; 0x0d; 0xf9; 0xd2;
-                           (* VPSUBW (%_% ymm10) (%_% ymm14) (%_% ymm10) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0x7d; 0x6f; 0x87; 0xc0; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (%_% ymm8) (Memop Word256 (%% (rdi,448))) *)
-  0xc5; 0x7d; 0x6f; 0x97; 0xe0; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (%_% ymm10) (Memop Word256 (%% (rdi,480))) *)
-  0xc5; 0xbd; 0xfd; 0xff;  (* VPADDW (%_% ymm7) (%_% ymm8) (%_% ymm7) *)
-  0xc4; 0x41; 0x2d; 0xfd; 0xc9;
-                           (* VPADDW (%_% ymm9) (%_% ymm10) (%_% ymm9) *)
-  0xc5; 0xfd; 0x7f; 0xbf; 0xc0; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,448))) (%_% ymm7) *)
-  0xc5; 0x7d; 0x7f; 0x8f; 0xe0; 0x01; 0x00; 0x00;
-                           (* VMOVDQA (Memop Word256 (%% (rdi,480))) (%_% ymm9) *)
+  0xc4; 0xc1; 0x45; 0x61; 0xd0;
+                           (* VPUNPCKLWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x61; 0xda;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x61; 0xdc;
+                           (* VPUNPCKLWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x61; 0xe6;
+                           (* VPUNPCKLWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xf2;  (* VMOVDQA (%_% ymm6) (%_% ymm2) *)
+  0xc4; 0xc1; 0x45; 0x69; 0xd0;
+                           (* VPUNPCKHWD (%_% ymm2) (%_% ymm7) (%_% ymm8) *)
+  0xc4; 0xc1; 0x35; 0x69; 0xda;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm9) (%_% ymm10) *)
+  0xc5; 0xed; 0xfa; 0xd3;  (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc5; 0x75; 0xd5; 0xfa;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm2) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x6d; 0xfa; 0xd7;
+                           (* VPSUBD (%_% ymm2) (%_% ymm2) (%_% ymm15) *)
+  0xc5; 0xed; 0x72; 0xe2; 0x10;
+                           (* VPSRAD (%_% ymm2) (%_% ymm2) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x25; 0x69; 0xdc;
+                           (* VPUNPCKHWD (%_% ymm3) (%_% ymm11) (%_% ymm12) *)
+  0xc4; 0xc1; 0x15; 0x69; 0xe6;
+                           (* VPUNPCKHWD (%_% ymm4) (%_% ymm13) (%_% ymm14) *)
+  0xc5; 0xe5; 0xfe; 0xdc;  (* VPADDD (%_% ymm3) (%_% ymm3) (%_% ymm4) *)
+  0xc5; 0x75; 0xd5; 0xfb;  (* VPMULLW (%_% ymm15) (%_% ymm1) (%_% ymm3) *)
+  0xc4; 0x41; 0x7d; 0xe5; 0xff;
+                           (* VPMULHW (%_% ymm15) (%_% ymm0) (%_% ymm15) *)
+  0xc4; 0xc1; 0x05; 0x72; 0xf7; 0x10;
+                           (* VPSLLD (%_% ymm15) (%_% ymm15) (Imm8 (word 16)) *)
+  0xc4; 0xc1; 0x65; 0xfa; 0xdf;
+                           (* VPSUBD (%_% ymm3) (%_% ymm3) (%_% ymm15) *)
+  0xc5; 0xe5; 0x72; 0xe3; 0x10;
+                           (* VPSRAD (%_% ymm3) (%_% ymm3) (Imm8 (word 16)) *)
+  0xc5; 0xed; 0x6b; 0xd3;  (* VPACKSSDW (%_% ymm2) (%_% ymm2) (%_% ymm3) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xd2; 0xd8;
+                           (* VPERMQ (%_% ymm2) (%_% ymm2) (Imm8 (word 216)) *)
+  0xc5; 0xfd; 0x6f; 0xde;  (* VMOVDQA (%_% ymm3) (%_% ymm6) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xe2; 0x20;
+                           (* VPERM2I128 (%_% ymm4) (%_% ymm3) (%_% ymm2) (Imm8 (word 32)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xe4; 0xd8;
+                           (* VPERMQ (%_% ymm4) (%_% ymm4) (Imm8 (word 216)) *)
+  0xc4; 0xe3; 0x65; 0x46; 0xea; 0x31;
+                           (* VPERM2I128 (%_% ymm5) (%_% ymm3) (%_% ymm2) (Imm8 (word 49)) *)
+  0xc4; 0xe3; 0xfd; 0x00; 0xed; 0xd8;
+                           (* VPERMQ (%_% ymm5) (%_% ymm5) (Imm8 (word 216)) *)
+  0xc5; 0xdd; 0xfd; 0xa7; 0xc0; 0x01; 0x00; 0x00;
+                           (* VPADDW (%_% ymm4) (%_% ymm4) (Memop Word256 (%% (rdi,448))) *)
+  0xc5; 0xd5; 0xfd; 0xaf; 0xe0; 0x01; 0x00; 0x00;
+                           (* VPADDW (%_% ymm5) (%_% ymm5) (Memop Word256 (%% (rdi,480))) *)
+  0xc5; 0xfd; 0x7f; 0xa7; 0xc0; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,448))) (%_% ymm4) *)
+  0xc5; 0xfd; 0x7f; 0xaf; 0xe0; 0x01; 0x00; 0x00;
+                           (* VMOVDQA (Memop Word256 (%% (rdi,480))) (%_% ymm5) *)
   0xc3                     (* RET *)
 ];;
 (*** BYTECODE END ***)
@@ -951,7 +1714,7 @@ let MLKEM_BASEMUL_K2_CORRECT = prove(
               (MAYCHANGE [events] ,,
                MAYCHANGE [RIP] ,, MAYCHANGE [RAX] ,,
                MAYCHANGE [ZMM0; ZMM1; ZMM2; ZMM3; ZMM4; ZMM5; ZMM6; ZMM7;
-                          ZMM8; ZMM9; ZMM10; ZMM11; ZMM12; ZMM13; ZMM14] ,,
+                          ZMM8; ZMM9; ZMM10; ZMM11; ZMM12; ZMM13; ZMM14; ZMM15] ,,
                MAYCHANGE [memory :> bytes(dst, 512)])`,
 
   CONV_TAC LENGTH_SIMPLIFY_CONV THEN
@@ -978,7 +1741,7 @@ let MLKEM_BASEMUL_K2_CORRECT = prove(
 
   MAP_EVERY (fun n -> X86_STEPS_TAC mlkem_basemul_k2_tmc_EXEC [n] THEN
                       SIMD_SIMPLIFY_TAC [montmul_x86; montmul_odd_x86])
-            (1--470) THEN
+            (1--934) THEN
 
   ENSURES_FINAL_STATE_TAC THEN
   ASM_REWRITE_TAC[] THEN
@@ -997,7 +1760,7 @@ let MLKEM_BASEMUL_K2_CORRECT = prove(
            DEPTH_CONV let_CONV) THEN
   ASM_REWRITE_TAC[WORD_ADD_0] THEN
 
-  DISCARD_STATE_TAC "s470" THEN
+  DISCARD_STATE_TAC "s934" THEN
 
   REPEAT CONJ_TAC THEN
   REWRITE_TAC[pmulaccred0; pmulacc0; pmul0; pmulaccred0_odd;
@@ -1234,7 +1997,7 @@ let MLKEM_BASEMUL_K2_SAFE = time prove
               MAYCHANGE [RAX] ,,
               MAYCHANGE
               [ZMM0; ZMM1; ZMM2; ZMM3; ZMM4; ZMM5; ZMM6; ZMM7;
-               ZMM8; ZMM9; ZMM10; ZMM11; ZMM12; ZMM13; ZMM14] ,,
+               ZMM8; ZMM9; ZMM10; ZMM11; ZMM12; ZMM13; ZMM14; ZMM15] ,,
               MAYCHANGE [memory :> bytes (dst,512)])`,
   ASSERT_CONCL_TAC full_spec THEN
   CONV_TAC LENGTH_SIMPLIFY_CONV THEN

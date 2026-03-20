@@ -350,6 +350,20 @@ let montmul_odd_x86 = prove
      (word_subword (word_mul (word_sx y : int32) (word_sx x)) (16,16) : int16)`,
   REWRITE_TAC[montmul_x86] THEN CONV_TAC WORD_RULE);;
 
+(* Montgomery reduction on 32-bit values for lazy basemul accumulation.
+ * Reduces a 32-bit sum of products by 2^16 modulo 3329, matching the
+ * interleaved vpmullw/vpmulhw/vpslld/vpsubd/vpsrad instruction sequence. *)
+
+let montred_x86 = define
+  `montred_x86 (x : int32) : int16 =
+   word_subword
+     (word_sub x
+       (word_mul
+         (word 3329 : int32)
+         (word_sx (word_mul (word_subword x (0,16) : int16)
+                            (word 62209 : int16)) : int32)))
+     (16,16)`;;
+
 let ntt_montmul = define
  `ntt_montmul (a:int32, b:int16) (x:int16) =
   word_sub
@@ -1028,6 +1042,88 @@ let CONGBOUND_MONTRED = prove
    `(a * p + x:int == y) (mod p) <=> (x == y) (mod p)`] THEN
   ASM_INT_ARITH_TAC);;
 
+let MONTRED_X86_LOW_ZERO = prove(
+  `word_subword
+     (word_sub x
+       (word_mul
+         (word 3329 : int32)
+         (word_sx (word_mul (word_subword x (0,16) : int16)
+                            (word 62209 : int16)) : int32)))
+     (0,16) : int16 = word 0`,
+  BITBLAST_TAC);;
+
+let MONTRED_X86_LEMMA = prove(
+  `!x:int32. &2 pow 16 * ival(montred_x86 x) =
+       ival(word_sub x
+         (word_mul (word 3329)
+           (word_sx (word_mul (word_subword x (0,16) : int16)
+                              (word 62209 : int16)) : int32)))`,
+  GEN_TAC THEN REWRITE_TAC[montred_x86] THEN
+  CONV_TAC(LAND_CONV(LAND_CONV INT_REDUCE_CONV)) THEN
+  MATCH_MP_TAC(BITBLAST_RULE
+   `word_subword (y:int32) (0,16):int16 = word 0
+    ==> &65536 * ival(word_subword y (16,16):int16) = ival y`) THEN
+  REWRITE_TAC[MONTRED_X86_LOW_ZERO]);;
+
+let CONGBOUND_MONTRED_X86 = prove(
+ `!a a' l u.
+     (ival a == a') (mod &3329) /\ l <= ival a /\ ival a <= u
+     ==> --(&2038402304) <= l /\ u <= &2038398975
+         ==> (ival(montred_x86 a) == &(inverse_mod 3329 65536) * a') (mod &3329) /\
+             (l - &109084672) div &2 pow 16 <= ival(montred_x86 a) /\
+             ival(montred_x86 a) <= &1 + (u + &109084672) div &2 pow 16`,
+  let montred_x86_range = prove(
+   `!v t:int. -- &2038402304 <= v /\ v <= &2038398975 /\
+               -- &32768 <= t /\ t < &32768
+               ==> -- &2147483648 <= v - &3329 * t /\
+                   v - &3329 * t < &2147483648`,
+    REPEAT GEN_TAC THEN INT_ARITH_TAC)
+  and montred_x86_arith = prove(
+   `!v t l u:int. l <= v /\ v <= u /\
+                  -- &32768 <= t /\ t < &32768
+                  ==> &65536 * (l - &109084672) div &65536 <= v - &3329 * t /\
+                      v - &3329 * t <= &65536 * (&1 + (u + &109084672) div &65536)`,
+    REPEAT GEN_TAC THEN INT_ARITH_TAC) in
+  REPEAT GEN_TAC THEN STRIP_TAC THEN STRIP_TAC THEN
+  CONV_TAC NUM_REDUCE_CONV THEN CONV_TAC(ONCE_DEPTH_CONV INVERSE_MOD_CONV) THEN
+  MP_TAC(SPECL [`&169:int`; `(&2:int) pow 16`; `&3329:int`] (INTEGER_RULE
+   `!d e n:int. (e * d == &1) (mod n)
+                ==> !x y. ((x == d * y) (mod n) <=> (e * x == y) (mod n))`)) THEN
+  ANTS_TAC THENL
+   [REWRITE_TAC[GSYM INT_REM_EQ] THEN INT_ARITH_TAC;
+    DISCH_THEN(fun th -> REWRITE_TAC[th])] THEN
+  ONCE_REWRITE_TAC[INT_ARITH
+   `l:int <= x <=> &2 pow 16 * l <= &2 pow 16 * x`] THEN
+  REWRITE_TAC[MONTRED_X86_LEMMA] THEN
+  REWRITE_TAC[WORD_RULE
+   `word_sub a (word_mul b c) :int32 = iword(ival a - ival b * ival c)`] THEN
+  ASM_SIMP_TAC[IVAL_WORD_SX; DIMINDEX_16; DIMINDEX_32; ARITH] THEN
+  CONV_TAC WORD_REDUCE_CONV THEN
+  MP_TAC(ISPEC `word_mul (word_subword (a:int32) (0,16) : int16)
+                          (word 62209 : int16)` IVAL_BOUND) THEN
+  REWRITE_TAC[DIMINDEX_16] THEN
+  CONV_TAC NUM_REDUCE_CONV THEN CONV_TAC INT_REDUCE_CONV THEN STRIP_TAC THEN
+  SUBGOAL_THEN
+   `ival(iword(ival (a:int32) - &3329 *
+      ival(word_mul (word_subword a (0,16) : int16)
+                    (word 62209 : int16))) : int32) =
+    ival a - &3329 * ival(word_mul (word_subword a (0,16) : int16)
+                                   (word 62209 : int16))`
+   SUBST1_TAC THENL
+   [MATCH_MP_TAC IVAL_IWORD THEN REWRITE_TAC[DIMINDEX_32] THEN
+    CONV_TAC NUM_REDUCE_CONV THEN CONV_TAC INT_REDUCE_CONV THEN
+    MP_TAC montred_x86_range THEN ASM_INT_ARITH_TAC;
+    ALL_TAC] THEN
+  CONJ_TAC THENL
+   [MATCH_MP_TAC(INTEGER_RULE
+     `(x:int == a') (mod n) ==> (x - n * t == a') (mod n)`) THEN
+    ASM_REWRITE_TAC[];
+    MP_TAC(SPECL [`ival(a:int32)`;
+       `ival(word_mul (word_subword (a:int32) (0,16) : int16)
+                      (word 62209 : int16))`;
+       `l:int`; `u:int`] montred_x86_arith) THEN
+    ASM_REWRITE_TAC[]]);;
+
 let CONGBOUND_NTT_MONTMUL = prove
  (`!x x' lx ux.
        ((ival x == x') (mod &3329) /\ lx <= ival x /\ ival x <= ux)
@@ -1158,6 +1254,9 @@ let rec ASM_CONGBOUND_RULE lfn tm =
     | Comb(Const("montred",_),t) ->
         let th1 = WEAKEN_INTCONG_RULE (num 3329) (ASM_CONGBOUND_RULE lfn t) in
         CONCL_BOUNDS_RULE(SIDE_ELIM_RULE(MATCH_MP CONGBOUND_MONTRED th1))
+    | Comb(Const("montred_x86",_),t) ->
+        let th1 = WEAKEN_INTCONG_RULE (num 3329) (ASM_CONGBOUND_RULE lfn t) in
+        CONCL_BOUNDS_RULE(SIDE_ELIM_RULE(MATCH_MP CONGBOUND_MONTRED_X86 th1))
     | Comb(Comb(Const("ntt_montmul",_),ab),t) ->
         let atm,btm = dest_pair ab and th0 = ASM_CONGBOUND_RULE lfn t in
         let th0' = WEAKEN_INTCONG_RULE (num 3329) th0 in
