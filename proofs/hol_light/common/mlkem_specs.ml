@@ -364,6 +364,57 @@ let montred_x86 = define
                             (word 62209 : int16)) : int32)))
      (16,16)`;;
 
+(* 32-bit Montgomery reduction matching the simulator's SIMD term structure.
+ * Uses 4 parameters because the simulator extracts 16-bit subwords from the
+ * full 256-bit register independently of the 32-bit lane extraction, so
+ * GSYM-matching requires separate pattern variables for q, qinv, x, and x_lo. *)
+let montred_x86_32bit = define
+  `montred_x86_32bit (q:int32) (qinv:int16) (x:int32) (x_lo:int16) : int32 =
+   word_ishr
+     (word_sub x
+       (word_shl
+         (word_zx
+           (word_subword
+             (word_mul q
+               (word_sx (word_mul qinv x_lo) : int32))
+             (16,16) : int16)
+           : int32)
+         16))
+     16`;;
+
+(* word_shl (word_join hi lo : int32) 16 = word_shl (word_zx lo : int32) 16 *)
+let WORD_SHL_JOIN_16 = prove(
+  `!hi lo. word_shl (word_join (hi:(16)word) (lo:(16)word) : (32)word) 16 =
+   word_shl (word_zx lo : (32)word) 16`,
+  REPEAT GEN_TAC THEN
+  ONCE_REWRITE_TAC[WORD_EQ_BITS_ALT] THEN
+  REWRITE_TAC[BIT_WORD_SHL; BIT_WORD_JOIN; BIT_WORD_ZX;
+              DIMINDEX_16; DIMINDEX_32] THEN
+  GEN_TAC THEN ARITH_TAC);;
+
+(* If low 16 bits are zero, arithmetic right shift by 16 = sign-extend upper 16 *)
+let WORD_ISHR_16_SX = prove(
+  `!y:(32)word. word_subword y (0,16) = (word 0 : (16)word)
+   ==> word_ishr y 16 = word_sx (word_subword y (16,16) : (16)word)`,
+  CONV_TAC WORD_BLAST);;
+
+(* Saturation of word_sx is identity: ival(word_sx y) is always in int16 range *)
+let SAT_WORD_SX_NOLET = prove(
+  `!(y:int16).
+    (if ival(word_sx y : int32) > &32767 then word 32767
+     else if ival(word_sx y : int32) < --(&32768) then (word 32768 : int16)
+     else iword(ival(word_sx y : int32))) : int16 = y`,
+  GEN_TAC THEN
+  SIMP_TAC[IVAL_WORD_SX; DIMINDEX_16; DIMINDEX_32; ARITH_RULE `16 <= 32`] THEN
+  MP_TAC(ISPEC `y:int16` IVAL_BOUND) THEN
+  REWRITE_TAC[DIMINDEX_16] THEN CONV_TAC NUM_REDUCE_CONV THEN
+  STRIP_TAC THEN
+  SUBGOAL_THEN `~(ival(y:int16) > &32767)` (fun th -> REWRITE_TAC[th]) THENL
+  [ASM_INT_ARITH_TAC; ALL_TAC] THEN
+  SUBGOAL_THEN `~(ival(y:int16) < --(&32768))` (fun th -> REWRITE_TAC[th]) THENL
+  [ASM_INT_ARITH_TAC; ALL_TAC] THEN
+  REWRITE_TAC[IWORD_IVAL]);;
+
 let ntt_montmul = define
  `ntt_montmul (a:int32, b:int16) (x:int16) =
   word_sub
@@ -1064,6 +1115,30 @@ let MONTRED_X86_LEMMA = prove(
    `word_subword (y:int32) (0,16):int16 = word 0
     ==> &65536 * ival(word_subword y (16,16):int16) = ival y`) THEN
   REWRITE_TAC[MONTRED_X86_LOW_ZERO]);;
+
+(* montred_x86_32bit with q=3329, qinv=62209 equals word_sx(montred_x86 x).
+ * Key lemmas (both proved by BITBLAST_RULE):
+ * - x - shl(zx(hi16),16) = (x-p) + zx(lo16)  [decomposition]
+ * - low16(r)=0 ==> ishr(r + zx(w)) 16 = sx(subword(r,16,16))  [ishr+add] *)
+let MONTRED_X86_32_EQ_SX =
+  let decomp = BITBLAST_RULE
+    `!(x:int32) (p:int32).
+      word_sub x (word_shl (word_zx (word_subword p (16,16):int16):int32) 16) =
+      word_add (word_sub x p) (word_zx (word_subword p (0,16):int16):int32)`
+  and ishr_add = BITBLAST_RULE
+    `!(r:int32) (w:int16).
+      word_subword r (0,16):int16 = word 0
+      ==> word_ishr (word_add r (word_zx w : int32)) 16 =
+          word_sx (word_subword r (16,16) : int16)` in
+  prove(
+  `!x:int32. montred_x86_32bit (word 3329) (word 62209) x (word_subword x (0,16)) =
+       word_sx (montred_x86 x)`,
+  GEN_TAC THEN
+  REWRITE_TAC[montred_x86_32bit; montred_x86] THEN
+  CONV_TAC(DEPTH_CONV WORD_NUM_RED_CONV) THEN
+  REWRITE_TAC[WORD_MUL_SYM; decomp] THEN
+  MATCH_MP_TAC ishr_add THEN
+  ACCEPT_TAC(REWRITE_RULE[WORD_MUL_SYM] MONTRED_X86_LOW_ZERO));;
 
 let CONGBOUND_MONTRED_X86 = prove(
  `!a a' l u.

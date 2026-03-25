@@ -1739,8 +1739,32 @@ let MLKEM_BASEMUL_K2_CORRECT = prove(
   DISCARD_MATCHING_ASSUMPTIONS [`read (memory :> bytes16 any) s = x`] THEN
   REPEAT STRIP_TAC THEN
 
+  (* Per-step tactic for lazy basemul accumulation:
+   * 1. SIMD_SIMPLIFY_TAC normalizes subword-of-join extractions
+   * 2. WORD_SHL_JOIN_16 eliminates word_join from word_shl (montred prep)
+   * 3. GSYM montred_x86_32bit folds the 5-instruction Montgomery reduction
+   * 4. After VPACKSSDW: MONTRED_X86_32_EQ_SX converts to word_sx(montred_x86)
+   *    and SAT_WORD_SX_NOLET eliminates saturation conditionals *)
+  let LAZY_SIMD_TAC =
+    SIMD_SIMPLIFY_TAC [] THEN
+    TRY(FIRST_X_ASSUM(fun th ->
+      if can (term_match [] `read X (s:x86state) = whatever:int256`) (concl th)
+      then
+        let th' = CONV_RULE (RAND_CONV (
+           TRY_CONV(DEPTH_CONV (REWR_CONV WORD_SHL_JOIN_16)) THENC
+           TRY_CONV(DEPTH_CONV (REWR_CONV (GSYM montred_x86_32bit))))) th in
+        let rhs = rand(concl th') in
+        let th'' =
+          if can (find_term is_cond) rhs
+          then CONV_RULE (RAND_CONV (
+                 REWRITE_CONV[MONTRED_X86_32_EQ_SX] THENC
+                 DEPTH_CONV(REWR_CONV SAT_WORD_SX_NOLET))) th'
+          else th' in
+        ASSUME_TAC th''
+      else FAIL_TAC "")) in
+
   MAP_EVERY (fun n -> X86_STEPS_TAC mlkem_basemul_k2_tmc_EXEC [n] THEN
-                      SIMD_SIMPLIFY_TAC [montmul_x86; montmul_odd_x86])
+                      LAZY_SIMD_TAC)
             (1--934) THEN
 
   ENSURES_FINAL_STATE_TAC THEN
